@@ -1,0 +1,25 @@
+<html>
+  <head>
+      <title>Logout</title>
+      <style>
+        body {
+          margin: 0;
+          font-family: Arial, Helvetica, sans-serif;
+          text-align: center;
+          background: #f5f7fb;
+          color: #111827;
+        }
+      </style>
+  </head>
+  <body>
+
+      <script>
+          localStorage.removeItem("isLoggedIn");
+          localStorage.removeItem("currentUser");
+      </script>
+
+      <h1>You have been logged out!!!</h1>
+      <a href="login.html"><h3>Login again</h3></a>
+
+  </body>
+</html>

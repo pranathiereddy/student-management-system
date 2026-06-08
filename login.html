@@ -1,0 +1,126 @@
+<html>
+<head>
+    <title>Login</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        background: #f5f7fb;
+        color: #111827;
+      }
+        nav a{
+            text-decoration: none;
+            padding:0 10px;
+            color:white
+        }
+        nav a:hover{
+            cursor: pointer;
+            color: black;
+        }
+
+      nav {
+        background: #0ea5e9;
+        padding: 12px 16px;
+      }
+
+      h1 {
+        margin: 18px 0;
+      }
+
+      form {
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+      }
+
+      label {
+        display: block;
+        text-align: left;
+        font-weight: 600;
+        margin: 12px 0 8px;
+        color: #111827;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 14px;
+        margin-top: 6px;
+      }
+
+      button {
+        margin-top: 14px;
+        width: 100%;
+        padding: 10px 12px;
+        border: none;
+        border-radius: 10px;
+        background: #0ea5e9;
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <a href="register.html">Register</a>
+      <a href="index.html">Home</a>
+    </nav>
+
+    <h1>Login</h1>
+
+    <form id="loginForm">
+      <label>
+        Email:
+        <input type="email" name="email" placeholder="enter email" required />
+      </label>
+
+      <label>
+        Password:
+        <input type="password" name="password" placeholder="enter password" required />
+      </label>
+      <p>Don't have an account? <a href="register.html">Register here</a></p>
+
+      <button type="submit">Login</button>      
+    </form>
+    <script>
+      document.getElementById("loginForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const email = document.querySelector('input[name="email"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+
+        const foundUser = users.find(user =>
+            user.email === email &&
+            user.password === password
+        );
+
+        if (foundUser) {
+            localStorage.setItem("isLoggedIn", "true");
+
+            // Optional: store current user
+            localStorage.setItem(
+                "currentUser",
+                JSON.stringify(foundUser)
+            );
+
+            alert("Login successful!");
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Invalid email or password");
+        }
+      });
+    </script>
+  </body>
+</html>
+
