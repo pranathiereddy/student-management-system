@@ -1,9 +1,8 @@
+<!DOCTYPE html>
 <html>
 <head>
-    
     <title>Register</title>
     <style>
-
       body {
         margin: 0;
         font-family: Arial, Helvetica, sans-serif;
@@ -16,14 +15,16 @@
         background: #0ea5e9;
         padding: 12px 16px;
       }
-      nav a{
-          text-decoration: none;
-          padding:0 10px;
-          color:white
+
+      nav a {
+        text-decoration: none;
+        padding: 0 10px;
+        color: white;
       }
-      nav a:hover{
-          cursor: pointer;
-          color: black;
+
+      nav a:hover {
+        cursor: pointer;
+        color: black;
       }
 
       h1 {
@@ -56,9 +57,16 @@
         outline: none;
         font-size: 14px;
         margin-top: 6px;
+        box-sizing: border-box;
       }
 
-   
+      .error {
+        color: #ef4444;
+        font-size: 12px;
+        margin: 6px 0 0;
+        text-align: left;
+        display: none;
+      }
 
       button {
         margin-top: 14px;
@@ -71,11 +79,10 @@
         font-weight: 700;
         cursor: pointer;
       }
-
     </style>
-  </head>
+</head>
 
-  <body>
+<body>
     <nav>
       <a href="login.html">Login</a>
       <a href="index.html">Home</a>
@@ -86,56 +93,117 @@
     <form id="registerForm">
       <label>
         Full Name:
-        <input type="text" name="name" placeholder="enter full name" required />
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter full name"
+          required
+          pattern="^[A-Za-z]+(?:\s[A-Za-z]+){0,2}$"
+        />
       </label>
 
       <label>
         Email:
-        <input type="email" name="email" placeholder="enter email" required />
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter email"
+          required
+        />
       </label>
+      <div class="error" id="emailError"></div>
 
       <label>
         Password:
-        <input type="password" name="password" placeholder="enter password" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter password"
+          required
+        />
       </label>
+      <div class="error" id="passwordError"></div>
 
       <label>
         Confirm Password:
-        <input type="password" name="confirmPassword" placeholder="re-enter password" required />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Re-enter password"
+          required
+        />
       </label>
-      <p>Already have an account? <a href="login.html">Login here</a></p>
 
+      <p>
+        Already have an account?
+        <a href="login.html">Login here</a>
+      </p>
 
       <button type="submit">Create Account</button>
     </form>
+
     <script>
-      document.getElementById("registerForm").addEventListener("submit", function(e) {
+      document.getElementById("registerForm").addEventListener("submit", function (e) {
         e.preventDefault();
 
-        const name = document.querySelector('input[name="name"]').value;
-        const email = document.querySelector('input[name="email"]').value;
+        const name = document.querySelector('input[name="name"]').value.trim();
+        const email = document.querySelector('input[name="email"]').value.trim();
         const password = document.querySelector('input[name="password"]').value;
         const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
 
-        if (password !== confirmPassword) {
-            alert("Passwords do not match");
-            return;
+        const emailErrorEl = document.getElementById("emailError");
+        const passwordErrorEl = document.getElementById("passwordError");
+
+        emailErrorEl.style.display = "none";
+        passwordErrorEl.style.display = "none";
+
+        emailErrorEl.textContent = "";
+        passwordErrorEl.textContent = "";
+
+        // Email validation
+        const emailRegex =
+          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+
+        if (!emailRegex.test(email)) {
+          emailErrorEl.textContent = "Please enter a valid email address.";
+          emailErrorEl.style.display = "block";
+          return;
         }
 
+        // Password validation
+        const passwordRegex =
+          /^(?=.{8,14}$)(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).*$/;
+
+        if (!passwordRegex.test(password)) {
+          passwordErrorEl.textContent =
+            "Password must be 8-14 characters and include at least 1 uppercase letter, 1 number, and 1 special character.";
+          passwordErrorEl.style.display = "block";
+          return;
+        }
+
+        // Confirm password check
+        if (password !== confirmPassword) {
+          alert("Passwords do not match");
+          return;
+        }
+
+        // Get existing users
         let users = JSON.parse(localStorage.getItem("users")) || [];
 
         // Check if email already exists
-        const existingUser = users.find(user => user.email === email);
+        const existingUser = users.find(
+          user => user.email.toLowerCase() === email.toLowerCase()
+        );
 
         if (existingUser) {
-            alert("Email already registered");
-            return;
+          alert("Email already registered");
+          return;
         }
 
         users.push({
-            name,
-            email,
-            password
+          name,
+          email,
+          password
         });
 
         localStorage.setItem("users", JSON.stringify(users));
@@ -143,7 +211,6 @@
         alert("Registration successful!");
         window.location.href = "login.html";
       });
-  </script>
-  </body>
+    </script>
+</body>
 </html>
-
